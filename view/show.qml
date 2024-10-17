@@ -30,14 +30,18 @@ RowLayout{
         font.pixelSize: 16 // 设置字体大小
         font.family: "Arial" // 设置字体类型
         onClicked: {
-            if(button_layout.current_index != button_layout.button_index[0]){
-                window_loader.setSource("channel_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
+            if(channel_window.visible == false){
+                channel_window.visible = true
+                channel_loader.setSource("channel_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
                 main_loader.item.viewmodel.position_mode = true
+
             }
+
             else{
-                window_loader.source = ""
+                channel_window.visible = false
+                channel_loader.source = ""
             }
-            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[0])
+            //button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[0])
         }
     }
 
@@ -48,13 +52,15 @@ RowLayout{
         font.pixelSize: 16
         font.family: "Arial"
         onClicked: {
-            if(button_layout.current_index != button_layout.button_index[1]){
-                window_loader.setSource("engineering_property_view.qml",{"viewmodel":main_loader.item.viewmodel,"path":folderDialog.file})
+            if(engineering_window.visible == false){
+                engineering_window.visible = true
+                engineering_loader.setSource("engineering_property_view.qml",{"viewmodel":main_loader.item.viewmodel,"path":folderDialog.file})
             }
             else{
-                window_loader.source = ""
+                engineering_window.visible = false
+                engineering_loader.source = ""
             }
-            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[1])
+            //button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[1])
         }
     }
 

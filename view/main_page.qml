@@ -140,6 +140,7 @@ ApplicationWindow {
                     onClicked: {
                         if (main_loader.source == "") {
                             main_loader.setSource("waveform_page.qml", {"loadSine": true})
+                            main_loader1.setSource("waveform_page.qml", {"loadSine": true})
                         }
                         benchmark_result = main_loader.item?.tess(50) ?? -1
                     }
@@ -205,6 +206,70 @@ ApplicationWindow {
             visible: body.loading
         }
 
+
+        ApplicationWindow {
+            id: channel_window
+            visible: false // 初始状态为隐藏
+            width: 400
+            height: 300
+            title: "通道属性"
+
+            Loader {
+                id: channel_loader
+                source: ""
+                visible: source != ""
+                active: channel_loader.visible
+                Layout.preferredWidth: 100
+                Layout.fillHeight: true
+            }
+        }
+
+         ApplicationWindow {
+            id: engineering_window
+            visible: false // 初始状态为隐藏
+            width: 400
+            height: 300
+            title: "工程属性"
+
+            Loader {
+                id: engineering_loader
+                source: ""
+                visible: source != ""
+                active: engineering_loader.visible
+                Layout.preferredWidth: 100
+                Layout.fillHeight: true
+            }
+        }
+
+        ApplicationWindow {
+
+            visible: false
+            width: 800
+            height: 600
+            title: "主工作区"
+            Item {
+                anchors.fill: parent
+                id: wbody
+                property bool loading
+
+                U.ProgressBar {
+                    indeterminate: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    visible: wbody.loading
+                }
+
+                Loader {
+                            active: source != ""
+                            id: main_loader1
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                    }
+            }
+        }
+
+
+
         ColumnLayout {
             anchors.fill: parent
             
@@ -219,15 +284,8 @@ ApplicationWindow {
 
             RowLayout{
 
-                Loader {
-                        source: ""
-                        // active: source != ""
-                        visible:source!= ""
-                        id: window_loader
-                        Layout.preferredWidth: 100
-                        // Layout.fillWidth: true
-                        Layout.fillHeight: true
-                }
+
+
 
                 Loader {
                         active: source != ""
@@ -235,6 +293,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                 }
+
             }
 
             Loader {
