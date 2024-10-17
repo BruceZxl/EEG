@@ -242,6 +242,25 @@ ApplicationWindow {
         }
 
         ApplicationWindow {
+            id: video_window
+            title:"视频同步"
+            width: 170
+            height: 220
+            visible: false
+            //color: "white"
+
+
+            Loader {
+                id: video_loader
+                source: ""
+                visible: source != ""
+                active: video_loader.visible
+                Layout.preferredWidth: 100
+                Layout.fillHeight: true
+            }
+        }
+
+        /*ApplicationWindow {
 
             visible: false
             width: 800
@@ -266,7 +285,7 @@ ApplicationWindow {
                             Layout.fillHeight: true
                     }
             }
-        }
+        }*/
 
 
 

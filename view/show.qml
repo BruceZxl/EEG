@@ -71,13 +71,25 @@ RowLayout{
         font.pixelSize: 16
         font.family: "Arial"
         onClicked: {
-            if(button_layout.current_index != button_layout.button_index[2]){
-                window_loader.setSource("video_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
+             onClicked: {
+                console.log("video_window visible: ", video_window.visible)
+                console.log("main_loader item: ", main_loader.item)
+                console.log("viewmodel: ", main_loader.item ? main_loader.item.viewmodel : "null")
+
+                if (video_window.visible == false) {
+                    video_window.visible = true
+                    video_loader.source = "video_property_view.qml"
+                    if (video_loader.item) {
+                        video_loader.item.viewmodel = main_loader.item.viewmodel
+                    } else {
+                        console.log("Error: video_loader item is null")
+                    }
+                } else {
+                    video_window.visible = false
+                    video_loader.source = ""
+                }
             }
-            else{
-                window_loader.source = ""
-            }
-            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[2])
+            //button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[2])
         }
     }
 
