@@ -49,10 +49,10 @@ ApplicationWindow {
 
                     onClicked: {
                         if (menu_window.current != this) {
-                            menu_view_loader.setSource("open_menu.qml")
+                            context_loader.setSource("open_menu.qml")
                             menu_window.current = this
                         } else {
-                            menu_view_loader.setSource("")
+                            context_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -67,12 +67,12 @@ ApplicationWindow {
                     // enabled: main_loader.item != null
                     onClicked: {
                         if (menu_window.current != this) {
-                            menu_view_loader.setSource("algorithm_view.qml", {
+                            context_loader.setSource("algorithm_view.qml", {
                                 "viewmodel": main_loader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
-                            menu_view_loader.setSource("")
+                            context_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -86,12 +86,12 @@ ApplicationWindow {
                     // enabled: main_loader.item != null
                     onClicked: {
                         if (menu_window.current != this) {
-                            menu_view_loader.setSource("report_view.qml", {
+                            context_loader.setSource("report_view.qml", {
                                 "viewmodel": main_loader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
-                            menu_view_loader.setSource("")
+                            context_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -104,12 +104,12 @@ ApplicationWindow {
                     checked: { menu_window.current == this }
                     onClicked: {
                         if(menu_window.current != this) {
-                            menu_view_loader.setSource("show.qml", {
+                            context_loader.setSource("show.qml", {
                                 "viewmodel": main_loader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
-                            menu_view_loader.setSource("")
+                            context_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -122,7 +122,7 @@ ApplicationWindow {
                     checkable: true
                     checked: { menu_window.current == this }
                     onClicked: {
-                        menu_view_loader.setSource("help_view.qml")
+                        context_loader.setSource("help_view.qml")
                     }
                 }
                 ToolButton {
@@ -140,33 +140,26 @@ ApplicationWindow {
                 }
             }
             SplitView {
-            orientation: Qt.Vertical
-            Layout.fillWidth: true
-            Layout.preferredHeight: 100
-
-            Rectangle {
-                color: "lightgray"
-                width: parent.width
-                height: 100
-                Text {
-                    anchors.centerIn: parent
-                    text: "上下文区域"
-                }
-            }
-        }
-
-            Item {
+                orientation: Qt.Vertical
                 Layout.fillWidth: true
-                implicitHeight: 80
-                visible: menu_view_loader.source != ""
+                Layout.preferredHeight: 200
+
                 Loader {
-                    id: menu_view_loader
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    source: ""
-                    visible: source != ""
+                        active: source != ""
+                        id: context_loader
+                        Layout.fillWidth: true
+                        Layout.fillHeight: 80
+                }
+
+                Loader {
+                        active: source != ""
+                        id: context1_loader
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                 }
             }
+
+
             
             FolderDialog {
                 id: importToDialog
