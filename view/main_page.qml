@@ -46,14 +46,7 @@ ApplicationWindow {
                         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                         Component.onCompleted: parent.hoverHandler = this
                     }
-                    // background: Rectangle {
-                    //     anchors.fill: parent
-                    //     color: Qt.darker(
-                    //         OSColors.accent(),
-                    //         menu_window.current == parent ?
-                    //             1.35 : parent.hoverHandler.hovered ? 1 : 1.2
-                    //     )
-                    // }
+
                     onClicked: {
                         if (menu_window.current != this) {
                             menu_view_loader.setSource("open_menu.qml")
@@ -146,6 +139,22 @@ ApplicationWindow {
                     }
                 }
             }
+            SplitView {
+            orientation: Qt.Vertical
+            Layout.fillWidth: true
+            Layout.preferredHeight: 100
+
+            Rectangle {
+                color: "lightgray"
+                width: parent.width
+                height: 100
+                Text {
+                    anchors.centerIn: parent
+                    text: "上下文区域"
+                }
+            }
+        }
+
             Item {
                 Layout.fillWidth: true
                 implicitHeight: 80
