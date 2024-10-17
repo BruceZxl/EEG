@@ -219,26 +219,6 @@ ApplicationWindow {
 
             RowLayout{
 
-                ColumnLayout{
-
-                    id:button_layout
-                    Layout.fillHeight: true
-                    property int current_index:0
-                    property var button_index: [1,2,3]
-                    Layout.preferredWidth: 100
-                    spacing:20
-
-                    function updata_index(current_index,button_index) {
-                        if (current_index == button_index) return 0
-                        else {
-
-                            return button_index
-                        }
-                    }
-
-
-                }
-
                 Loader {
                         source: ""
                         // active: source != ""

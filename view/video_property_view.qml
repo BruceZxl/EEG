@@ -4,6 +4,7 @@ import QtQuick.Dialogs
 import QtQuick.Controls
 import QtQuick.Layouts
 import WaveformPageViewModel
+
 Window {
     id: root
     title:"视频同步"

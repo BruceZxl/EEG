@@ -8,11 +8,28 @@ import MontageRegistry
 
 RowLayout{
     //显示
+    id:button_layout
+    Layout.fillHeight: true
+    property int current_index:0
+    property var button_index: [1,2,3]
+    Layout.preferredWidth: 100
+    spacing:20
+
+    function updata_index(current_index,button_index) {
+        if (current_index == button_index) return 0
+        else {
+
+            return button_index
+        }
+    }
 
     Button {
         text: "通道属性"
-        onClicked:{
-
+        width: 150 // 设置按钮宽度
+        height: 50 // 设置按钮高度
+        font.pixelSize: 16 // 设置字体大小
+        font.family: "Arial" // 设置字体类型
+        onClicked: {
             if(button_layout.current_index != button_layout.button_index[0]){
                 window_loader.setSource("channel_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
                 main_loader.item.viewmodel.position_mode = true
@@ -23,10 +40,14 @@ RowLayout{
             button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[0])
         }
     }
+
     Button {
         text: "工程属性"
-        onClicked:{
-
+        width: 150
+        height: 50
+        font.pixelSize: 16
+        font.family: "Arial"
+        onClicked: {
             if(button_layout.current_index != button_layout.button_index[1]){
                 window_loader.setSource("engineering_property_view.qml",{"viewmodel":main_loader.item.viewmodel,"path":folderDialog.file})
             }
@@ -34,12 +55,16 @@ RowLayout{
                 window_loader.source = ""
             }
             button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[1])
-            }
+        }
     }
 
     Button {
         text: "视频同步"
-        onClicked:{
+        width: 150
+        height: 50
+        font.pixelSize: 16
+        font.family: "Arial"
+        onClicked: {
             if(button_layout.current_index != button_layout.button_index[2]){
                 window_loader.setSource("video_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
             }
@@ -47,7 +72,7 @@ RowLayout{
                 window_loader.source = ""
             }
             button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[2])
-            }
+        }
     }
 
 
