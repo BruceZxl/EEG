@@ -103,16 +103,25 @@ ApplicationWindow {
                         }
                     }
                 }
-                // ToolButton {
-                //     text: "放大镜"
-                //     implicitWidth: menu_window.button_width
-                //     Layout.fillHeight: true
-                //     enabled: main_loader.item != null
-                //     onClicked: {
-                //         main_loader.item.viewmodel.maggot_mode = !main_loader.item.viewmodel.maggot_mode
-                //         menu_view_loader.setSource("")
-                //     }
-                // }
+                ToolButton{
+                    text: "显示"
+                    implicitWidth: menu_window.button_width
+                    Layout.fillHeight: true
+                    checkable: true
+                    checked: { menu_window.current == this }
+                    onClicked: {
+                        if(menu_window.current != this) {
+                            menu_view_loader.setSource("show.qml", {
+                                "viewmodel": main_loader.item.viewmodel
+                            })
+                            menu_window.current = this
+                        } else{
+                            menu_view_loader.setSource("")
+                            menu_window.current = null
+                        }
+                    }
+                }
+
                 ToolButton {
                     text: "帮助"
                     implicitWidth: menu_window.button_width
@@ -227,46 +236,7 @@ ApplicationWindow {
                         }
                     }
 
-                    Button {
-                        text: "通道属性"
-                        onClicked:{
 
-                            if(button_layout.current_index != button_layout.button_index[0]){
-                                window_loader.setSource("channel_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
-                                main_loader.item.viewmodel.position_mode = true
-                            }
-                            else{
-                                window_loader.source = ""
-                            }
-                            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[0])
-                        }
-                    }
-                    Button {
-                        text: "工程属性"
-                        onClicked:{
-
-                            if(button_layout.current_index != button_layout.button_index[1]){
-                                window_loader.setSource("engineering_property_view.qml",{"viewmodel":main_loader.item.viewmodel,"path":folderDialog.file})
-                            }
-                            else{
-                                window_loader.source = ""
-                            }
-                            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[1])
-                            }
-                    }
-
-                    Button {
-                        text: "视频同步"
-                        onClicked:{
-                            if(button_layout.current_index != button_layout.button_index[2]){
-                                window_loader.setSource("video_property_view.qml",{"viewmodel":main_loader.item.viewmodel})
-                            }
-                            else{
-                                window_loader.source = ""
-                            }
-                            button_layout.current_index = button_layout.updata_index(button_layout.current_index,button_layout.button_index[2])
-                            }
-                    }
                 }
 
                 Loader {
