@@ -70,7 +70,7 @@ ApplicationWindow {
                     onClicked: {
                         if (menu_window.current != this) {
                             context_loader.setSource("algorithm_view.qml", {
-                                "viewmodel": main_loader.item.viewmodel
+                                "viewmodel": contentLoader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
@@ -85,11 +85,11 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     checkable: true
                     checked: { menu_window.current == this }
-                    // enabled: main_loader.item != null
+                    // enabled: contentLoader.item != null
                     onClicked: {
                         if (menu_window.current != this) {
                             context_loader.setSource("report_view.qml", {
-                                "viewmodel": main_loader.item.viewmodel
+                                "viewmodel": contentLoader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
@@ -107,7 +107,7 @@ ApplicationWindow {
                     onClicked: {
                         if(menu_window.current != this) {
                             context_loader.setSource("show.qml", {
-                                "viewmodel": main_loader.item.viewmodel
+                                "viewmodel": contentLoader.item.viewmodel
                             })
                             menu_window.current = this
                         } else{
@@ -141,11 +141,27 @@ ApplicationWindow {
                     property int benchmark_result: -1
                     text: ((benchmark_result > 0) ? `（FPS: ${benchmark_result}）` : "性能测试 ")
                     onClicked: {
-                        if (main_loader.source == "") {
-                            main_loader.setSource("waveform_page.qml", {"loadSine": true})
-                            main_loader1.setSource("waveform_page.qml", {"loadSine": true})
+                        if (contentLoader.source == "") {
+                            contentLoader.setSource("waveform_page.qml", {"loadSine": true})
+
                         }
-                        benchmark_result = main_loader.item?.tess(50) ?? -1
+                        benchmark_result = contentLoader.item?.tess(50) ?? -1
+                    }
+                }
+
+                ToolButton {
+                    implicitWidth: menu_window.button_width * 1.4
+                    Layout.fillHeight: true
+                    text: ("结构图")
+                    onClicked: {
+                        if (!structure_area.visible) {
+                            //structure_loader.setSource("") //装载时启用
+                            structure_area.visible = true
+                        }
+                        else{
+                            //structure_loader.setSource("")
+                            structure_area.visible = false
+                        }
                     }
                 }
             }
@@ -153,7 +169,7 @@ ApplicationWindow {
             FolderDialog {
                 id: importToDialog
                 title: "Save imported project to..."
-                onAccepted: main_loader.setSource("waveform_page.qml", {
+                onAccepted: contentLoader.setSource("waveform_page.qml", {
                     "path": folder,
                     "importFrom": importFileDialog.file,
                     "importFormat": importFileDialog.lastSelectedExtension
@@ -163,7 +179,7 @@ ApplicationWindow {
             FolderDialog {
                 id: folderDialog
                 title: "Select project"
-                onAccepted: main_loader.setSource("waveform_page.qml", {"path": folder})
+                onAccepted: contentLoader.setSource("waveform_page.qml", {"path": folder})
             }
 
             FileDialog {
@@ -228,26 +244,32 @@ ApplicationWindow {
 
             // 结构区
             Item {
+                id: structure_area
                 Layout.fillWidth: true
-                Layout.preferredHeight: 150 // 启动时高度为150
+                SplitView.preferredHeight: 150 // 启动时高度为150
+                SplitView.minimumHeight: 100
                 visible: structure_loader.source != "" // 当source不为空时可见
                 Rectangle {
                     anchors.fill: parent
                     color: "lightgreen" // 背景颜色填充整个区域
+                    Text {
+                        anchors.centerIn: parent
+                        text: "结构图"
+                    }
                 }
 
                 Loader {
                     anchors.fill: parent
-                    id: structure_loader
+                    id: structure_loader//结构图
                     source: "" // 设置为非空字符串以加载内容
 
                     Rectangle {
                         anchors.fill: parent
                         color: "transparent" // 确保内部颜色不覆盖背景
-                        Text {
+                        /*Text {
                             anchors.centerIn: parent
                             text: "结构区"
-                        }
+                        }*/
                     }
                 }
             }
@@ -257,48 +279,87 @@ ApplicationWindow {
                 orientation: Qt.Horizontal
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: 200 // 设置启动时的首选高度
-                Layout.minimumHeight: 100 // 设置最小高度
+                SplitView.preferredHeight: 600 // 设置启动时的首选高度
+                SplitView.minimumHeight: 600 // 设置最小高度
 
                 // 左半区，信息显示区，分为上下两部分
                 SplitView {
                     orientation: Qt.Vertical
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: 100 // 设置最小宽度
+                    //SplitView.fillWidth: true
+                    SplitView.preferredWidth: 50 // 设置最小宽度
+
+                    //visible: false
 
                     // 通道属性
-                    Rectangle {
+                    Item {
+                        id: channel_area
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 100 // 设置启动时的首选高度
-                        Layout.minimumHeight: 50 // 设置最小高度
-                        color: "lightcoral"
-                        Text {
-                            anchors.centerIn: parent
-                            text: "通道属性"
+                        SplitView.preferredWidth: 50 // 设置启动时的首选宽度
+                        SplitView.minimumWidth: 50 // 设置最小宽度
+                        SplitView.preferredHeight: 100 // 设置启动时的首选高度
+                        SplitView.minimumHeight: 200 // 设置最小高度
+                        visible: structure_loader.source != "" // 当source不为空时可见
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "lightcoral"
+                            /*Text {
+                                anchors.centerIn: parent
+                                text: "通道属性"
+                            }*/
+                        }
+                        Loader {
+                            anchors.fill: parent
+                            id: channel_loader
+                            source: "" // 设置为非空字符串以加载内容
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "transparent" // 确保内部颜色不覆盖背景
+                            }
                         }
                     }
 
                     // 工程属性
-                    Rectangle {
+                    Item {
+                        id: engineering_area
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 100 // 设置启动时的首选高度
-                        Layout.minimumHeight: 50 // 设置最小高度
-                        color: "lightpink"
-                        Text {
-                            anchors.centerIn: parent
-                            text: "工程属性"
+                        SplitView.preferredHeight: 100 // 设置启动时的首选高度
+                        SplitView.minimumHeight: 200 // 设置最小高度
+                        visible: structure_loader.source != "" // 当source不为空时可见
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "lightpink"
+                            /*Text {
+                                anchors.centerIn: parent
+                                text: "工程属性"
+                            }*/
+                        }
+                        Loader {
+                            anchors.fill: parent
+                            id: engineering_loader
+                            source: "" // 设置为非空字符串以加载内容
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "transparent" // 确保内部颜色不覆盖背景
+                            }
                         }
                     }
                 }
                  // 右半区，主界面
                 Rectangle {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: 200 // 设置最小宽度
+                    SplitView.fillWidth: true
+                    SplitView.minimumWidth: 800 // 设置最小宽度
                     color: "lightseagreen"
                     Text {
                         anchors.centerIn: parent
                         text: "主界面"
                     }
+                    Loader {
+                        id: contentLoader
+                        anchors.fill: parent
+                    }
+
                 }
             }
 
@@ -316,12 +377,15 @@ ApplicationWindow {
             visible: body.loading
         }
 
-        ApplicationWindow {
+        /*ApplicationWindow {
             id: channel_window
             visible: false // 初始状态为隐藏
             width: 400
             height: 300
             title: "通道属性"
+
+            // 设置窗口为无边框
+            flags: Qt.Window | Qt.FramelessWindowHint
 
             Loader {
                 id: channel_loader
@@ -331,14 +395,17 @@ ApplicationWindow {
                 Layout.preferredWidth: 100
                 Layout.fillHeight: true
             }
-        }
+        }*/
 
-         ApplicationWindow {
+         /*ApplicationWindow {
             id: engineering_window
             visible: false // 初始状态为隐藏
             width: 400
             height: 300
             title: "工程属性"
+
+            // 设置窗口为无边框
+            flags: Qt.Window | Qt.FramelessWindowHint
 
             Loader {
                 id: engineering_loader
@@ -348,7 +415,7 @@ ApplicationWindow {
                 Layout.preferredWidth: 100
                 Layout.fillHeight: true
             }
-        }
+        }*/
 
         ApplicationWindow {
             id: video_window
@@ -357,6 +424,9 @@ ApplicationWindow {
             height: 220
             visible: false
             //color: "white"
+
+            // 设置窗口为无边框
+            flags: Qt.Window | Qt.FramelessWindowHint
 
 
             Loader {

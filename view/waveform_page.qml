@@ -7,12 +7,11 @@ import QtQuick.Layouts
 // import QObject
 import QtQuick.Controls.Universal as U
 
-Window {
-    id: root
-    visible: true
-    width: 800
-    height: 600
-    title: "Waveform Viewer"
+
+
+
+    ColumnLayout {
+        anchors.fill: parent
 
     property alias viewmodel: viewmodel
     property bool loadSine
@@ -27,11 +26,7 @@ Window {
         let fps = Math.round(times / sum);
         console.log(`FPS: ${fps}`)
         return fps
-    }
-
-    ColumnLayout {
-        anchors.fill: parent
-
+        }
         WaveformPageViewModel {
             id: viewmodel
             Component.onCompleted: reload(path, neo, loadSine, importFrom, importFormat)
@@ -67,4 +62,3 @@ Window {
             }
         }
     }
-}
