@@ -192,17 +192,16 @@ ApplicationWindow {
             Layout.preferredHeight: 120
 
             Loader {
-                id: context_loader
                 anchors.fill: parent
-                sourceComponent: Rectangle {
-                    color: "lightblue" // 确保颜色设置在这里
+                active: source != ""
+                id: context_loader
+
+                Rectangle {
+                    color: "lightblue"
                     anchors.fill: parent
-                    Text {
-                        anchors.centerIn: parent
-                        text: "第一块"
-                    }
                 }
             }
+
         }
 
 
