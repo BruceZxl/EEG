@@ -50,9 +50,11 @@ ApplicationWindow {
                     onClicked: {
                         if (menu_window.current != this) {
                             context_loader.setSource("open_menu.qml")
+                            structure_loader.setSource("open_menu.qml")
                             menu_window.current = this
                         } else {
                             context_loader.setSource("")
+                            structure_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -224,27 +226,82 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            // 第二块
-            Rectangle {
+            // 结构区
+            Item {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                color: "lightblue"
-                Text {
-                    anchors.centerIn: parent
-                    text: "第二块"
+                Layout.preferredHeight: 150 // 启动时高度为150
+                visible: structure_loader.source != "" // 当source不为空时可见
+                Rectangle {
+                    anchors.fill: parent
+                    color: "lightgreen" // 背景颜色填充整个区域
+                }
+
+                Loader {
+                    anchors.fill: parent
+                    id: structure_loader
+                    source: "" // 设置为非空字符串以加载内容
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "transparent" // 确保内部颜色不覆盖背景
+                        Text {
+                            anchors.centerIn: parent
+                            text: "结构区"
+                        }
+                    }
                 }
             }
 
-            // 第三块
-            Rectangle {
+            // 第三块，分为左右两部分
+            SplitView {
+                orientation: Qt.Horizontal
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: "lightgreen"
-                Text {
-                    anchors.centerIn: parent
-                    text: "第三块"
+                Layout.preferredHeight: 200 // 设置启动时的首选高度
+                Layout.minimumHeight: 100 // 设置最小高度
+
+                // 左半区，信息显示区，分为上下两部分
+                SplitView {
+                    orientation: Qt.Vertical
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 100 // 设置最小宽度
+
+                    // 通道属性
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 100 // 设置启动时的首选高度
+                        Layout.minimumHeight: 50 // 设置最小高度
+                        color: "lightcoral"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "通道属性"
+                        }
+                    }
+
+                    // 工程属性
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 100 // 设置启动时的首选高度
+                        Layout.minimumHeight: 50 // 设置最小高度
+                        color: "lightpink"
+                        Text {
+                            anchors.centerIn: parent
+                            text: "工程属性"
+                        }
+                    }
+                }
+                 // 右半区，主界面
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 200 // 设置最小宽度
+                    color: "lightseagreen"
+                    Text {
+                        anchors.centerIn: parent
+                        text: "主界面"
+                    }
                 }
             }
+
         }
     }
     Item {
