@@ -25,9 +25,9 @@ RowLayout{
 
     Button {
         text: "通道属性"
-        width: 150 // 设置按钮宽度
-        height: 50 // 设置按钮高度
-        font.pixelSize: 16 // 设置字体大小
+        width: 200 // 设置按钮宽度
+        height: 80 // 设置按钮高度
+        font.pixelSize: 20 // 设置字体大小
         font.family: "Arial" // 设置字体类型
         onClicked: {
             if(channel_window.visible == false){
@@ -47,9 +47,9 @@ RowLayout{
 
     Button {
         text: "工程属性"
-        width: 150
-        height: 50
-        font.pixelSize: 16
+        width: 200
+        height: 80
+        font.pixelSize: 20
         font.family: "Arial"
         onClicked: {
             if(engineering_window.visible == false){
@@ -66,9 +66,9 @@ RowLayout{
 
     Button {
         text: "视频同步"
-        width: 150
-        height: 50
-        font.pixelSize: 16
+        width: 200
+        height: 80
+        font.pixelSize: 20
         font.family: "Arial"
         onClicked: {
              onClicked: {

@@ -190,18 +190,30 @@ ApplicationWindow {
         Item {
             Layout.fillWidth: true
             Layout.preferredHeight: 120
-
-            Loader {
+            visible: context_loader.source != ""// 当source不为空时可见
+            Rectangle {
                 anchors.fill: parent
-                active: source != ""
-                id: context_loader
-
-                Rectangle {
-                    color: "lightblue"
-                    anchors.fill: parent
-                }
+                color: "lightblue" // 背景颜色填充整个区域
             }
 
+            Loader {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 30 // 左边距
+                anchors.rightMargin: 30 // 右边距
+                id: context_loader
+                source: "" // 设置为非空字符串以加载内容
+            }
+            Rectangle {
+                    color: "transparent" // 确保内部颜色不覆盖背景
+                    anchors.fill: parent
+                    /*Text {
+                        anchors.centerIn: parent
+                        text: "上下文内容"
+                    }*/
+                }
         }
 
 
