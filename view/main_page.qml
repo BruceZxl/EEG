@@ -104,7 +104,7 @@ ApplicationWindow {
                     checked: { menu_window.current == this }
                     onClicked: {
                         if(menu_window.current != this) {
-                            context1_loader.setSource("show.qml", {
+                            context_loader.setSource("show.qml", {
                                 "viewmodel": main_loader.item.viewmodel
                             })
                             menu_window.current = this
@@ -122,7 +122,15 @@ ApplicationWindow {
                     checkable: true
                     checked: { menu_window.current == this }
                     onClicked: {
-                        context_loader.setSource("help_view.qml")
+                        if (menu_window.current != this){
+                            context_loader.setSource("help_view.qml")
+                            menu_window.current = this
+                        }
+                        else{
+                            context_loader.setSource("")
+                            menu_window.current = null
+                        }
+
                     }
                 }
                 ToolButton {
@@ -174,50 +182,60 @@ ApplicationWindow {
             }
         }
     }
-    SplitView {
-        orientation: Qt.Vertical
+    ColumnLayout {
+        id: context_area
         anchors.fill: parent
 
+        // 上下文区域，固定高度120
         Item {
             Layout.fillWidth: true
-            visible: context_loader.source != ""
+            Layout.preferredHeight: 120
 
             Loader {
                 id: context_loader
-                active: source != ""
-                source: "" // 设置为非空字符串以加载内容
-                anchors.fill: parent // 确保宽度填满
-                Rectangle {
-                    width: parent.width
-                    height: parent.height // 示例高度，可以根据实际内容调整
-                    color: "lightblue"
+                anchors.fill: parent
+                sourceComponent: Rectangle {
+                    color: "lightblue" // 确保颜色设置在这里
+                    anchors.fill: parent
                     Text {
                         anchors.centerIn: parent
-                        text: "上下文"
+                        text: "第一块"
                     }
                 }
             }
         }
-        /*Item {
+
+
+
+        // 使用Splitter来分隔第二块和第三块
+        SplitView {
+            orientation: Qt.Vertical
             Layout.fillWidth: true
-            Layout.fillHeight: true // 占用剩余空间
-            Loader {
-                id: structure_loader
-                active: true
-                anchors.fill: parent
-                Rectangle {
-                    color: "lightgreen"
-                    anchors.fill: parent
-                    Text {
-                        anchors.centerIn: parent
-                        text: "结构图"
-                    }
+            Layout.fillHeight: true
+
+            // 第二块
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "lightblue"
+                Text {
+                    anchors.centerIn: parent
+                    text: "第二块"
                 }
             }
-        }*/
+
+            // 第三块
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: "lightgreen"
+                Text {
+                    anchors.centerIn: parent
+                    text: "第三块"
+                }
+            }
+        }
     }
-
-
     Item {
         anchors.fill: parent
         id: body
