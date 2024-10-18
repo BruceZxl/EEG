@@ -140,40 +140,6 @@ ApplicationWindow {
                 }
             }
 
-            SplitView {
-                orientation: Qt.Vertical
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                Item {
-                    Layout.fillWidth: true
-                    visible: context_loader.source != ""
-
-                    Loader {
-                        id: context_loader
-                        active: source != ""
-                        source: "" // 设置为非空字符串以加载内容
-                        anchors.fill: parent // 确保宽度填满
-                        onLoaded: {
-                            // 调整高度以适应内容
-                            if (item) {
-                                item.anchors.fill = undefined; // 解除填充限制
-                                item.anchors.horizontalCenter = parent.horizontalCenter; // 保持水平居中
-                            }
-                        }
-                        Rectangle {
-                            width: parent.width
-                            height: 200 // 示例高度，可以根据实际内容调整
-                            color: "lightblue"
-                            Text {
-                                anchors.centerIn: parent
-                                text: "上下文"
-                            }
-                        }
-                    }
-                }
-            }
-
             FolderDialog {
                 id: importToDialog
                 title: "Save imported project to..."
@@ -207,7 +173,48 @@ ApplicationWindow {
                 })
             }
         }
+    }
+    SplitView {
+        orientation: Qt.Vertical
+        anchors.fill: parent
 
+        Item {
+            Layout.fillWidth: true
+            visible: context_loader.source != ""
+
+            Loader {
+                id: context_loader
+                active: source != ""
+                source: "" // 设置为非空字符串以加载内容
+                anchors.fill: parent // 确保宽度填满
+                Rectangle {
+                    width: parent.width
+                    height: parent.height // 示例高度，可以根据实际内容调整
+                    color: "lightblue"
+                    Text {
+                        anchors.centerIn: parent
+                        text: "上下文"
+                    }
+                }
+            }
+        }
+        /*Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true // 占用剩余空间
+            Loader {
+                id: structure_loader
+                active: true
+                anchors.fill: parent
+                Rectangle {
+                    color: "lightgreen"
+                    anchors.fill: parent
+                    Text {
+                        anchors.centerIn: parent
+                        text: "结构图"
+                    }
+                }
+            }
+        }*/
     }
 
 
@@ -222,22 +229,6 @@ ApplicationWindow {
             anchors.right: parent.right
             visible: body.loading
         }
-
-        Loader {
-            //active: source != ""
-            id: context1_loader
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Rectangle {
-                color: "lightgreen"
-                anchors.fill: parent
-                Text {
-                    anchors.centerIn: parent
-                    text: "结构图"
-                }
-            }
-        }
-
 
         ApplicationWindow {
             id: channel_window
