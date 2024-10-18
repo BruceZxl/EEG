@@ -104,7 +104,7 @@ ApplicationWindow {
                     checked: { menu_window.current == this }
                     onClicked: {
                         if(menu_window.current != this) {
-                            context_loader.setSource("show.qml", {
+                            context1_loader.setSource("show.qml", {
                                 "viewmodel": main_loader.item.viewmodel
                             })
                             menu_window.current = this
@@ -139,6 +139,39 @@ ApplicationWindow {
                     }
                 }
             }
+            SplitView {
+                orientation: Qt.Vertical
+                Layout.fillWidth: true
+                Layout.preferredHeight: 200
+
+                Loader {
+                    active: source != ""
+                    id: context_loader
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 120
+                    Rectangle {
+                        color: "lightblue"
+                        anchors.fill: parent
+                    }
+                }
+
+                Loader {
+                    active: source != ""
+                    id: context1_loader
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 100
+                    Rectangle {
+                        color: "lightgreen"
+                        anchors.fill: parent
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Loader 2 Content"
+                        }
+                    }
+                }
+            }
+
+
 
             FolderDialog {
                 id: importToDialog
@@ -173,44 +206,7 @@ ApplicationWindow {
                 })
             }
         }
-
     }
-    SplitView {
-                orientation: Qt.Vertical
-                anchors.fill: parent
-
-                Loader {
-                    active: source != ""
-                    id: context_loader
-                    Layout.fillWidth: true
-                    Layout.minimumHeight: 120
-                    Rectangle {
-                        anchors.fill: parent
-                        color: context_loader.active ? "lightblue" : "transparent" // 根据active状态改变颜色
-                        visible: context_loader.active // 根据active状态控制可见性
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Loader 1 Content"
-                            visible: context_loader.active // 根据active状态控制可见性
-                        }
-                    }
-                }
-
-                Loader {
-                    active: source != ""
-                    id: context1_loader
-                    Layout.fillWidth: true
-                    Layout.minimumHeight: 100
-                    Rectangle {
-                        color: "lightgreen"
-                        anchors.fill: parent
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Loader 2 Content"
-                        }
-                    }
-                }
-            }
 
     Item {
         anchors.fill: parent
