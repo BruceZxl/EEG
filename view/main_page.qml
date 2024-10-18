@@ -50,11 +50,9 @@ ApplicationWindow {
                     onClicked: {
                         if (menu_window.current != this) {
                             context_loader.setSource("open_menu.qml")
-                            structure_loader.setSource("open_menu.qml")
                             menu_window.current = this
                         } else {
                             context_loader.setSource("")
-                            structure_loader.setSource("")
                             menu_window.current = null
                         }
                     }
@@ -286,29 +284,30 @@ ApplicationWindow {
                 SplitView {
                     orientation: Qt.Vertical
                     //SplitView.fillWidth: true
-                    SplitView.preferredWidth: 50 // 设置最小宽度
+                    SplitView.preferredWidth: 200 // 设置初始宽度
+                    SplitView.minimumWidth: 200 // 设置初始宽度
 
                     //visible: false
 
                     // 通道属性
                     Item {
                         id: channel_area
-                        Layout.fillWidth: true
-                        SplitView.preferredWidth: 50 // 设置启动时的首选宽度
-                        SplitView.minimumWidth: 50 // 设置最小宽度
+                        SplitView.fillWidth: true
                         SplitView.preferredHeight: 100 // 设置启动时的首选高度
                         SplitView.minimumHeight: 200 // 设置最小高度
                         visible: structure_loader.source != "" // 当source不为空时可见
                         Rectangle {
                             anchors.fill: parent
-                            color: "lightcoral"
+                            color: "#B0C4DE" // 浅蓝灰
                             /*Text {
                                 anchors.centerIn: parent
                                 text: "通道属性"
                             }*/
                         }
                         Loader {
-                            anchors.fill: parent
+                            anchors.top: parent.top // 上对齐
+                            anchors.left: parent.left // 左对齐
+                            anchors.margins: 50 // 设置上边距为50
                             id: channel_loader
                             source: "" // 设置为非空字符串以加载内容
 
@@ -328,14 +327,16 @@ ApplicationWindow {
                         visible: structure_loader.source != "" // 当source不为空时可见
                         Rectangle {
                             anchors.fill: parent
-                            color: "lightpink"
+                            color: "#B0C4DE" // 浅蓝灰
                             /*Text {
                                 anchors.centerIn: parent
                                 text: "工程属性"
                             }*/
                         }
                         Loader {
-                            anchors.fill: parent
+                            anchors.top: parent.top // 上对齐
+                            anchors.left: parent.left // 左对齐
+                            anchors.margins: 50 // 设置上边距为50
                             id: engineering_loader
                             source: "" // 设置为非空字符串以加载内容
 
@@ -350,7 +351,7 @@ ApplicationWindow {
                 Rectangle {
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 800 // 设置最小宽度
-                    color: "lightseagreen"
+                    color: "white"
                     Text {
                         anchors.centerIn: parent
                         text: "主界面"
