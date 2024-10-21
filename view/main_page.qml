@@ -284,8 +284,8 @@ ApplicationWindow {
                 SplitView {
                     orientation: Qt.Vertical
                     //SplitView.fillWidth: true
-                    SplitView.preferredWidth: 200 // 设置初始宽度
-                    SplitView.minimumWidth: 200 // 设置初始宽度
+                    SplitView.preferredWidth: 300 // 设置初始宽度
+                    SplitView.minimumWidth: 200 // 设置最小宽度
 
                     //visible: false
 
@@ -293,7 +293,7 @@ ApplicationWindow {
                     Item {
                         id: channel_area
                         SplitView.fillWidth: true
-                        SplitView.preferredHeight: 100 // 设置启动时的首选高度
+                        SplitView.preferredHeight: 300 // 设置启动时的首选高度
                         SplitView.minimumHeight: 200 // 设置最小高度
                         visible: structure_loader.source != "" // 当source不为空时可见
                         Rectangle {
@@ -308,6 +308,7 @@ ApplicationWindow {
                             anchors.top: parent.top // 上对齐
                             anchors.left: parent.left // 左对齐
                             anchors.margins: 50 // 设置上边距为50
+                            scale: 1.3
                             id: channel_loader
                             source: "" // 设置为非空字符串以加载内容
 
@@ -322,7 +323,7 @@ ApplicationWindow {
                     Item {
                         id: engineering_area
                         Layout.fillWidth: true
-                        SplitView.preferredHeight: 100 // 设置启动时的首选高度
+                        SplitView.preferredHeight: 200 // 设置启动时的首选高度
                         SplitView.minimumHeight: 200 // 设置最小高度
                         visible: structure_loader.source != "" // 当source不为空时可见
                         Rectangle {
@@ -337,6 +338,7 @@ ApplicationWindow {
                             anchors.top: parent.top // 上对齐
                             anchors.left: parent.left // 左对齐
                             anchors.margins: 50 // 设置上边距为50
+                            scale: 1.3
                             id: engineering_loader
                             source: "" // 设置为非空字符串以加载内容
 
