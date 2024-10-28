@@ -35,33 +35,31 @@ def qt_message_handler(mode, context, message):
 
 def main():
     QtCore.qInstallMessageHandler(qt_message_handler)
-    # type hints for Qt is rubbish
-    qmlRegisterType(MaggotView, 'MaggotView', 1, 0, 'MaggotView')
-    # noinspection PyTypeChecker
-    qmlRegisterType(TagView, 'TagView', 1, 0, 'TagView')
-    # noinspection PyTypeChecker
-    qmlRegisterType(WaveformView, 'WaveformView', 1, 0, 'WaveformView')
-    # noinspection PyTypeChecker
-    qmlRegisterSingletonType(FrameSizes, 'FrameSizes', 1, 0, 'FrameSizes')
-    # noinspection PyTypeChecker
-    qmlRegisterType(TimeDeltaViewModel, 'TimeDeltaViewModel', 1, 0, 'TimeDeltaViewModel')
-    # noinspection PyTypeChecker
-    qmlRegisterType(WaveformPageViewModel, 'WaveformPageViewModel', 1, 0, 'WaveformPageViewModel')
-    # noinspection PyTypeChecker
-    qmlRegisterType(WaveformAreaViewModel, 'WaveformAreaViewModel', 1, 0, 'WaveformAreaViewModel')
-    # noinspection PyTypeChecker
-    qmlRegisterSingletonType(MontageRegistry, 'MontageRegistry', 1, 0, 'MontageRegistry')
-    # noinspection PyTypeChecker
-    qmlRegisterSingletonType(OSColors, 'OSColors', 1, 0, 'OSColors')
-    # noinspection PyTypeChecker
-    qmlRegisterSingletonType(AlgorithmViewModel, 'AlgorithmViewModel', 1, 0, 'AlgorithmViewModel')
-
-
 
     app = QApplication()
     eng = QQmlApplicationEngine()
-    eng.load(QUrl.fromLocalFile(str(Path(__file__).parent / "view" / "main_page.qml")))
 
+    # 创建 ViewModel 实例
+    viewmodel = WaveformPageViewModel()
+
+    # 将实例设置到 QML 上下文中
+    eng.rootContext().setContextProperty("viewmodel", viewmodel)
+
+    # 注册其他类型
+    qmlRegisterType(MaggotView, 'MaggotView', 1, 0, 'MaggotView')
+    qmlRegisterType(TagView, 'TagView', 1, 0, 'TagView')
+    qmlRegisterType(WaveformView, 'WaveformView', 1, 0, 'WaveformView')
+    qmlRegisterSingletonType(FrameSizes, 'FrameSizes', 1, 0, 'FrameSizes')
+    qmlRegisterType(TimeDeltaViewModel, 'TimeDeltaViewModel', 1, 0, 'TimeDeltaViewModel')
+    # 保留这行注册
+    qmlRegisterType(WaveformPageViewModel, 'WaveformPageViewModel', 1, 0, 'WaveformPageViewModel')
+    qmlRegisterType(WaveformAreaViewModel, 'WaveformAreaViewModel', 1, 0, 'WaveformAreaViewModel')
+    qmlRegisterSingletonType(MontageRegistry, 'MontageRegistry', 1, 0, 'MontageRegistry')
+    qmlRegisterSingletonType(OSColors, 'OSColors', 1, 0, 'OSColors')
+    qmlRegisterSingletonType(AlgorithmViewModel, 'AlgorithmViewModel', 1, 0, 'AlgorithmViewModel')
+
+    # 加载 QML 文件
+    eng.load(QUrl.fromLocalFile(str(Path(__file__).parent / "view" / "main_page.qml")))
 
     loop = qasync.QEventLoop(app)
     sys.exit(loop.run_forever())

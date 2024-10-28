@@ -11,6 +11,7 @@ import qasync
 import torch
 from PySide6 import QtCore
 from PySide6.QtCore import QObject
+from PySide6.QtQml import QQmlApplicationEngine
 from loguru import logger
 import pyedflib
 from mne.io.constants import FIFF
@@ -63,6 +64,8 @@ class WaveformPageViewModel(QObject):
     channelpositionChanged = QtCore.Signal()
     positionyChanged = QtCore.Signal()
 
+    channelHeightChanged = QtCore.Signal()  # 高度变化信号
+
     def __init__(self, *, parent=None):
         super().__init__(parent)
         self.loading = None
@@ -72,7 +75,11 @@ class WaveformPageViewModel(QObject):
         self._selection_range = [0.0] * 4
         self._maggot_mode = False
         self._project: Optional[ESigProject] = None
+        # 初始化时设置一个默认值，这个值会在第一次接收到容器高度时被更新
         self._channel_height = 80
+        self._min_channel_height = 40
+        self._margin = 20
+
         self._user_amplifier: Optional[np.ndarray] = None
         self._cache_block_seconds = 0
         self._lowpass = self._hipass = self._notch = 0.0
@@ -110,8 +117,22 @@ class WaveformPageViewModel(QObject):
 
         self._colour_list = []
 
-    # def get_mark_sequence(self):
-    #     return self._mark_sequence
+    # channel_height 的 getter
+    def get_channel_height(self):
+        return self._channel_height
+
+        # channel_height 的 setter
+
+    def set_channel_height(self, value):
+        if self._channel_height != value:
+            self._channel_height = value
+            self.channelHeightChanged.emit()
+
+            # 定义 Property
+
+    channel_height = QtCore.Property(int, fget=get_channel_height,
+                                     fset=set_channel_height,
+                                     notify=channelHeightChanged)
 
     @QtCore.Slot(str, bool, bool, str, str)
     def reload(self, path, neo, load_sine, import_from, import_format):
@@ -724,3 +745,4 @@ class WaveformPageViewModel(QObject):
         with qasync.QThreadExecutor(1) as exec:
             args = [ESigProject.export_as, file, self._project.waveform]
             await loop.run_in_executor(exec, *args)
+

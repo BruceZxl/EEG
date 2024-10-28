@@ -134,6 +134,7 @@ ColumnLayout {
             width: main_scroller.contentWidth
 
 
+            //通道标签
             Column {
                 Repeater {
                     model: viewmodel.montage_block_viewmodel.channels
@@ -145,7 +146,6 @@ ColumnLayout {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-
             }
 
             WaveformView {
@@ -277,6 +277,8 @@ ColumnLayout {
             }
         }
     }
+
+
     Loader{
         id: maggot_window
         active:page_viewmodel.maggot_mode??true

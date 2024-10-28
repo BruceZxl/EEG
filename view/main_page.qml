@@ -278,7 +278,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 SplitView.preferredHeight: 600 // 设置启动时的首选高度
-                SplitView.minimumHeight: 600 // 设置最小高度
+                SplitView.minimumHeight: 400 // 设置最小高度
 
                 // 左半区，信息显示区，分为上下两部分
                 SplitView {
@@ -354,15 +354,32 @@ ApplicationWindow {
                     SplitView.fillWidth: true
                     SplitView.minimumWidth: 800 // 设置最小宽度
                     color: "white"
+
                     Text {
                         anchors.centerIn: parent
                         text: "主界面"
                     }
+
                     Loader {
                         id: contentLoader
                         anchors.fill: parent
-                    }
 
+                        onHeightChanged: {
+                            if (viewmodel) {
+                                // 直接更新 channel_height 为 contentLoader 的高度
+                                channel_model.channel_height = contentLoader.height / 8
+                                console.log("更新 channel_height 为:", contentLoader.height / 8)
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            if (viewmodel) {
+                                // 初始化时设置 channel_height
+                                channel_model.channel_height = contentLoader.height / 8
+                                console.log("初始化 channel_height 为:", contentLoader.height / 8)
+                            }
+                        }
+                    }
                 }
             }
 
