@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Timer
 import numpy as np
 from PySide6 import QtCore,QtGui
-from PySide6.QtCore import QRectF
+from PySide6.QtCore import QRectF, QObject
 from PySide6.QtGui import QImage,QColor
 from PySide6.QtQuick import QQuickPaintedItem
 import cv2
@@ -45,6 +45,9 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     frameSizeChanged = QtCore.Signal()  # 创建信号  窗口大小改变
     mark_breathe_event_record_changed = QtCore.Signal()
     colorChanged = QtCore.Signal()
+
+    heightChanged = QtCore.Signal(int) # 创建信号，窗口高度改变
+
     def __init__(self):  # 初始化 定义
         super().__init__()
         self._frame_size = FrameSizes().lookup(FrameSize.TenSec)  # 初始化 波形大小 时间是 10s
@@ -57,6 +60,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         self._mark_breathe_event_record = []
         self._seconds = 0
         self._wave_record=[]
+        self._window_height = 600
 
     # noinspection PyTypeChecker
     @QtCore.Slot(int, result=float)
@@ -192,6 +196,16 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if (pvm := self._page_viewmodel) is not None and (vm := self._viewmodel) is not None:
             vm.zoom(int(y // pvm.channel_height), amount / -360)
 
+        # 定义属性
+
+    @QtCore.Slot(int)  # 确保添加这个装饰器
+    def setWindowHeight(self, height):  # 改用驼峰命名以符合Qt惯例
+        if self._window_height != height:
+            self._window_height = height
+            self.heightChanged.emit(height)
+            print("100")
+            print(f"Height updated in Python: {height}px")
+
     def _render(self, downsample=True, test_portion=0):
         pvm = self._page_viewmodel
         dpi = self.window().devicePixelRatio()
@@ -204,7 +218,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         height = math.ceil(num_channels * pvm.channel_height * dpi)
         if test_portion == 4:
             return
-        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * pvm.channel_height * dpi).astype(np.int32)
+        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * self._window_height / 9 * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's
