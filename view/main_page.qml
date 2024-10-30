@@ -4,7 +4,8 @@ import QtQuick.Layouts
 import Qt.labs.platform
 import QtQuick.Controls.Universal as U
 import OSColors
-import WaveformView
+//import WaveformView
+//import WindowHeight
 
 ApplicationWindow {
     visible: true
@@ -361,6 +362,8 @@ ApplicationWindow {
                     Loader {
                         id: contentLoader
                         anchors.fill: parent
+
+                        onHeightChanged: WaveformView.setWindowHeight(height)
                     }
 
                 }

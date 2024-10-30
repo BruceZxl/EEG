@@ -58,6 +58,10 @@ def main():
     qmlRegisterSingletonType(OSColors, 'OSColors', 1, 0, 'OSColors')
     qmlRegisterSingletonType(AlgorithmViewModel, 'AlgorithmViewModel', 1, 0, 'AlgorithmViewModel')
 
+
+    #注册方法
+    logic = WaveformView()
+    eng.rootContext().setContextProperty("WaveformView", logic)
     # 加载 QML 文件
     eng.load(QUrl.fromLocalFile(str(Path(__file__).parent / "view" / "main_page.qml")))
 

@@ -46,7 +46,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     mark_breathe_event_record_changed = QtCore.Signal()
     colorChanged = QtCore.Signal()
 
-    heightChanged = QtCore.Signal(int) # 创建信号，窗口高度改变
+    heightChanged = QtCore.Signal(int)  # 创建信号，窗口高度改变
 
     def __init__(self):  # 初始化 定义
         super().__init__()
@@ -196,15 +196,15 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if (pvm := self._page_viewmodel) is not None and (vm := self._viewmodel) is not None:
             vm.zoom(int(y // pvm.channel_height), amount / -360)
 
-        # 定义属性
-
     @QtCore.Slot(int)  # 确保添加这个装饰器
     def setWindowHeight(self, height):  # 改用驼峰命名以符合Qt惯例
         if self._window_height != height:
             self._window_height = height
-            self.heightChanged.emit(height)
-            print("100")
-            print(f"Height updated in Python: {height}px")
+            #self.heightChanged.emit()
+            print(f"Height updated in Python: {self._window_height}px")
+            self._render()
+        return height
+
 
     def _render(self, downsample=True, test_portion=0):
         pvm = self._page_viewmodel
@@ -218,6 +218,11 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         height = math.ceil(num_channels * pvm.channel_height * dpi)
         if test_portion == 4:
             return
+
+        # 直接使用 self._window_height，不需要通过 setWindowHeight 调用
+        print(f"Current window height: {self._window_height}px")
+
+
         frac += ((np.arange(num_channels, dtype=np.float32) + .5) * self._window_height / 9 * dpi).astype(np.int32)
 
         # allocate canvas if needed
