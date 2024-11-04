@@ -3,6 +3,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from threading import Timer
 import numpy as np
+from PIL.ImageWin import Window
 from PySide6 import QtCore,QtGui
 from PySide6.QtCore import QRectF, QObject
 from PySide6.QtGui import QImage,QColor
@@ -14,7 +15,9 @@ from data_model.frame_size import FrameSize
 from viewmodel.frame_sizes import FrameSizes
 from viewmodel.waveform_area_viewmodel import WaveformAreaViewModel
 from viewmodel.waveform_page_viewmodel import WaveformPageViewModel
-def create_canvas_with_lines(width=1190, height=1280, lines=5, color=(0, 0, 0), line_color=(192,192,192), dash_length=10, gap_length=5):
+
+
+def create_canvas_with_lines(width=1190, height=1920, lines=5, color=(0, 0, 0), line_color=(192,192,192), dash_length=10, gap_length=5):
     # 创建一个白色画布
     canvas = np.ones((height, width, 3), dtype=np.uint8) * 255
 
@@ -37,16 +40,16 @@ def create_canvas_with_lines(width=1190, height=1280, lines=5, color=(0, 0, 0), 
 
     return canvas
 
-xs = [1,2,4,5,10,30,60,120,300,1800]
 
-imgs = [create_canvas_with_lines(lines=x) for x in xs]
 
 class WaveformView(QQuickPaintedItem):  # 波形视图
     frameSizeChanged = QtCore.Signal()  # 创建信号  窗口大小改变
     mark_breathe_event_record_changed = QtCore.Signal()
     colorChanged = QtCore.Signal()
-
     heightChanged = QtCore.Signal(int)  # 创建信号，窗口高度改变
+    window_height = 600
+    xs = [1, 2, 4, 5, 10, 30, 60, 120, 300, 1800]
+
 
     def __init__(self):  # 初始化 定义
         super().__init__()
@@ -61,6 +64,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         self._seconds = 0
         self._wave_record=[]
         self._window_height = 600
+        self.imgs = [create_canvas_with_lines(height=self.window_height + 150, lines=x) for x in self.xs]
 
     # noinspection PyTypeChecker
     @QtCore.Slot(int, result=float)
@@ -196,14 +200,19 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if (pvm := self._page_viewmodel) is not None and (vm := self._viewmodel) is not None:
             vm.zoom(int(y // pvm.channel_height), amount / -360)
 
-    @QtCore.Slot(int)  # 确保添加这个装饰器
-    def setWindowHeight(self, height):  # 改用驼峰命名以符合Qt惯例
-        if self._window_height != height:
-            self._window_height = height
-            #self.heightChanged.emit()
-            print(f"Height updated in Python: {self._window_height}px")
-            self._render()
-        return height
+    @QtCore.Property(int, notify=heightChanged)  # 添加属性
+    def window_height(self):
+        return self._window_height
+
+    @QtCore.Slot(int)
+    def setWindowHeight(self, height):
+        if WaveformView.window_height != height:
+            WaveformView.window_height = height
+            #self.heightChanged.emit(height)
+            print(f"Height updated globally: {WaveformView.window_height}px")
+        #return self._window_height
+
+        # 用于测试高度值是否更新
 
 
     def _render(self, downsample=True, test_portion=0):
@@ -219,11 +228,12 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if test_portion == 4:
             return
 
-        # 直接使用 self._window_height，不需要通过 setWindowHeight 调用
-        print(f"Current window height: {self._window_height}px")
+            # 方式2：通过setWindowHeight获取当前高度
+
+        print(f"RENDER_Height updated in Python: {WaveformView.window_height}px")
 
 
-        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * self._window_height / 9 * dpi).astype(np.int32)
+        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * WaveformView.window_height / 9 * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's
@@ -234,7 +244,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
             img = self._canvas
 
         # img[:] = (204,255,204)
-        img = imgs[self._frame_size]
+        img = self.imgs[self._frame_size]
         # x = np.arange(len(frac), dtype=np.float32) * display_fs \
         #     * self._viewmodel.scale / self._viewmodel.breathe_event_detection.sampling_rate
         # x = x.astype(np.int32)
