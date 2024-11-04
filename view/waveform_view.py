@@ -64,7 +64,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         self._seconds = 0
         self._wave_record=[]
         self._window_height = 600
-        self.imgs = [create_canvas_with_lines(height=self.window_height + 150, lines=x) for x in self.xs]
+        self.imgs = [create_canvas_with_lines(height=self.window_height, lines=x) for x in self.xs]
 
     # noinspection PyTypeChecker
     @QtCore.Slot(int, result=float)
@@ -110,6 +110,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         pvm = self._page_viewmodel
         if pvm is None or not pvm.loaded:
             return
+
         width = self.width()
         if self._previous_width != width:
             self.update_scale()
@@ -209,7 +210,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if WaveformView.window_height != height:
             WaveformView.window_height = height
             #self.heightChanged.emit(height)
-            print(f"Height updated globally: {WaveformView.window_height}px")
+            print(f"Height updated globally: {self.window_height}px")
         #return self._window_height
 
         # 用于测试高度值是否更新
@@ -228,31 +229,27 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if test_portion == 4:
             return
 
-            # 方式2：通过setWindowHeight获取当前高度
-
-        print(f"RENDER_Height updated in Python: {WaveformView.window_height}px")
 
 
-        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * WaveformView.window_height / 9 * dpi).astype(np.int32)
+        #print(f"RENDER_Height updated in Python: {WaveformView.window_height}px")
+
+
+        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * self.window_height / 9 * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's
         # i.e. grow by double, shrink by four times
-        if self._canvas is None or self._canvas.shape[:2] != (height, width):
-            self._canvas = img = np.zeros([height, width, 3], dtype=np.uint8)
-        else:
-            img = self._canvas
 
-        # img[:] = (204,255,204)
-        img = self.imgs[self._frame_size]
-        # x = np.arange(len(frac), dtype=np.float32) * display_fs \
-        #     * self._viewmodel.scale / self._viewmodel.breathe_event_detection.sampling_rate
-        # x = x.astype(np.int32)
+
+        # 从 xs 中获取当前时间参数
+        current_time_scale = self.xs[self._frame_size]  # 假设 _frame_size 是 xs 的索引
+
+        # 创建新的画布，带竖线
+        new_canvas = create_canvas_with_lines(width=width, height=self.window_height, lines=current_time_scale)
+        self._canvas = np.copy(new_canvas)
+
+        # 渲染波形数据
         x = np.linspace(0, len(frac) * dpi, len(frac)).astype(np.int32)
-        # logger.debug(x)
-        if test_portion == 3:
-            return
-
         futures = []
         portion_size = frac.shape[0] // self._render_num_threads
         portion_offset = 0
@@ -261,21 +258,17 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
             if frac.shape[0] - new_offset < portion_size:
                 new_offset = frac.shape[0]
             futures.append(self._render_executor.submit(
-                self._render_portion, self._page_viewmodel.colour_list,frac[portion_offset:new_offset + 1], x[portion_offset:new_offset + 1], img,
+                self._render_portion, self._page_viewmodel.colour_list, frac[portion_offset:new_offset + 1],
+                x[portion_offset:new_offset + 1], self._canvas,
                 round(dpi)))
-            self._wave_record.append([frac[portion_offset:new_offset + 1], x[portion_offset:new_offset + 1], img,
-                round(dpi)])
-            # print("_render_portion","portion",frac[portion_offset:new_offset + 1],"xpos",x[portion_offset:new_offset + 1],"img",img,"thickness",
-            #     round(dpi))
             portion_offset = new_offset
         [future.result() for future in futures]
-        w, h, c = img.shape
-        if test_portion == 2:
-            return
-        return QImage(img.data, h, w, h * c, QImage.Format_RGB888)
+
+        w, h, c = self._canvas.shape
+        return QImage(self._canvas.data, h, w, h * c, QImage.Format_RGB888)
 
 
-    # @QtCore.Slot(int, str)
+        # @QtCore.Slot(int, str)
     # def changeColor(self, index, colorStr):
     #     # 将颜色字符串转换为BGR格式
     #     color = QtGui.QColor(colorStr).rgb()
