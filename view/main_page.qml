@@ -364,11 +364,10 @@ ApplicationWindow {
                         anchors.fill: parent
 
                         onHeightChanged: WaveformView.setWindowHeight(height)
-                    }
 
+                    }
                 }
             }
-
         }
     }
     Item {

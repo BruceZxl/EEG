@@ -77,8 +77,7 @@ class WaveformPageViewModel(QObject):
         self._project: Optional[ESigProject] = None
         # 初始化时设置一个默认值，这个值会在第一次接收到容器高度时被更新
         self._channel_height = 80
-        self._min_channel_height = 40
-        self._margin = 20
+
 
         self._user_amplifier: Optional[np.ndarray] = None
         self._cache_block_seconds = 0

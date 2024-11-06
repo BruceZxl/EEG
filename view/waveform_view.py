@@ -48,6 +48,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     colorChanged = QtCore.Signal()
     heightChanged = QtCore.Signal(int)  # 创建信号，窗口高度改变
     window_height = 600
+    nums_channel = 0
     xs = [1, 2, 4, 5, 10, 30, 60, 120, 300, 1800]
 
 
@@ -224,17 +225,18 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         # get data to render & downsample to screen width
         frac,_ = self._viewmodel.get_standard_fraction(
             int(logical_width) if downsample else None)
-        num_channels = frac.shape[1]
-        height = math.ceil(num_channels * pvm.channel_height * dpi)
+        self.num_channels = frac.shape[1]
+        N = max(self.num_channels, 80)
+        height = math.ceil(self.num_channels * pvm.channel_height * dpi)
         if test_portion == 4:
             return
 
 
 
-        #print(f"RENDER_Height updated in Python: {WaveformView.window_height}px")
+        print(f"------------------通道数量: {type(self.num_channels)}---------------------")
 
 
-        frac += ((np.arange(num_channels, dtype=np.float32) + .5) * self.window_height / 9 * dpi).astype(np.int32)
+        frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * self.window_height / min(self.num_channels + 1, 9) * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's
@@ -245,7 +247,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         current_time_scale = self.xs[self._frame_size]  # 假设 _frame_size 是 xs 的索引
 
         # 创建新的画布，带竖线
-        new_canvas = create_canvas_with_lines(width=width, height=self.window_height, lines=current_time_scale)
+        new_canvas = create_canvas_with_lines(width=width, height=int(self.window_height / min(self.num_channels + 1, 9) * (self.num_channels + 1)), lines=current_time_scale)
         self._canvas = np.copy(new_canvas)
 
         # 渲染波形数据
