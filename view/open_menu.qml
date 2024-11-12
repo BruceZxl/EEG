@@ -28,7 +28,7 @@ RowLayout {
         icon.color: "transparent"
         icon.width: 40 // 设置图标宽度为40
         icon.height: 40 // 设置图标高度为40
-        onClicked: main_loader.setSource("")
+        onClicked: contentLoader.setSource("")
     }
     ToolSeparator { Layout.fillHeight: true }
     // ToolButton {
@@ -44,21 +44,21 @@ RowLayout {
     //     display: AbstractButton.TextUnderIcon
     //     icon.source: "images/icon/append_data.png"
     //     icon.color: "transparent"
-    //     onClicked: main_loader.item.viewmodel.append_example()
+    //     onClicked: contentLoader.item.viewmodel.append_example()
     // }
     // ToolButton {
     //     text: "保存变更"
     //     display: AbstractButton.TextUnderIcon
     //     icon.source: "images/icon/save_change.png"
     //     icon.color: "transparent"
-    //     onClicked: main_loader.item.viewmodel.save_changes()
+    //     onClicked: contentLoader.item.viewmodel.save_changes()
     // }
     // ToolButton {
     //     text: "接收数据开关"
     //     display: AbstractButton.TextUnderIcon
     //     icon.source: "images/icon/save_change.png"
     //     icon.color: "transparent"
-    //     onClicked: ipwin_loader.setSource("ipport_view.qml", {"viewmodel": main_loader.item.viewmodel})
+    //     onClicked: ipwin_loader.setSource("ipport_view.qml", {"viewmodel": contentLoader.item.viewmodel})
     // }
     // ToolSeparator { Layout.fillHeight: true }
     // ToolButton {
@@ -66,7 +66,7 @@ RowLayout {
     //     display: AbstractButton.TextUnderIcon
     //     icon.source: "images/icon/sin.png"
     //     icon.color: "transparent"
-    //     onClicked: main_loader.setSource("waveform_page.qml", {"loadSine": true})
+    //     onClicked: contentLoader.setSource("waveform_page.qml", {"loadSine": true})
     // }
 
     ColumnLayout {

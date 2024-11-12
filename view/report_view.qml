@@ -19,8 +19,8 @@ RowLayout {
             icon.width: 40 // 设置图标宽度为40
             icon.height: 40 // 设置图标高度为40
             onClicked: {
-                main_loader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
-                main_loader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
+                contentLoader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
+                contentLoader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
             }
         }
         ToolButton {
@@ -33,8 +33,8 @@ RowLayout {
             icon.width: 45 // 设置图标宽度为40
             icon.height: 45 // 设置图标高度为40
             onClicked: {
-                main_loader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
-                main_loader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
+                contentLoader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
+                contentLoader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
             }
         }
         ToolButton {
@@ -47,7 +47,7 @@ RowLayout {
             icon.width: 40 // 设置图标宽度为40
             icon.height: 40 // 设置图标高度为40
             onClicked: {
-                main_loader.item.viewmodel.maggot_mode = !main_loader.item.viewmodel.maggot_mode
+                contentLoader.item.viewmodel.maggot_mode = !contentLoader.item.viewmodel.maggot_mode
             }
         }
         ToolButton {
@@ -60,7 +60,7 @@ RowLayout {
             icon.width: 40 // 设置图标宽度为40
             icon.height: 40 // 设置图标高度为40
             onClicked: {
-                main_loader.item.viewmodel.maggot_mode = !main_loader.item.viewmodel.maggot_mode
+                contentLoader.item.viewmodel.maggot_mode = !contentLoader.item.viewmodel.maggot_mode
             }
         }
         ToolSeparator { Layout.fillHeight: true }

@@ -9,7 +9,7 @@ Item {
     id: root
     width: 300
     height: 300
-    //property alias viewmodel: main_loader.viewmodel
+    //property alias viewmodel: contentLoader.viewmodel
 
     FileDialog {
         id: fileDialog

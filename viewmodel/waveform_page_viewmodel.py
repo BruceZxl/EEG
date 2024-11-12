@@ -65,6 +65,8 @@ class WaveformPageViewModel(QObject):
     positionyChanged = QtCore.Signal()
 
     channelHeightChanged = QtCore.Signal()  # 高度变化信号
+    _channel_height = 80 #通道高度
+    window_height = 600 #窗口高度
 
     def __init__(self, *, parent=None):
         super().__init__(parent)
@@ -76,7 +78,7 @@ class WaveformPageViewModel(QObject):
         self._maggot_mode = False
         self._project: Optional[ESigProject] = None
         # 初始化时设置一个默认值，这个值会在第一次接收到容器高度时被更新
-        self._channel_height = 80
+        #self._channel_height = 150
 
 
         self._user_amplifier: Optional[np.ndarray] = None
@@ -116,22 +118,14 @@ class WaveformPageViewModel(QObject):
 
         self._colour_list = []
 
-    # channel_height 的 getter
-    def get_channel_height(self):
-        return self._channel_height
+    @QtCore.Slot(int)
+    def setWindowHeight(self, height):
+        if self.window_height != height:
+            self.window_height = height
+            # self.numChannels.emit(self.num_channels)
+            print(f"Height updated globally: {self.window_height}px")
 
-        # channel_height 的 setter
 
-    def set_channel_height(self, value):
-        if self._channel_height != value:
-            self._channel_height = value
-            self.channelHeightChanged.emit()
-
-            # 定义 Property
-
-    channel_height = QtCore.Property(int, fget=get_channel_height,
-                                     fset=set_channel_height,
-                                     notify=channelHeightChanged)
 
     @QtCore.Slot(str, bool, bool, str, str)
     def reload(self, path, neo, load_sine, import_from, import_format):

@@ -46,7 +46,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     frameSizeChanged = QtCore.Signal()  # 创建信号  窗口大小改变
     mark_breathe_event_record_changed = QtCore.Signal()
     colorChanged = QtCore.Signal()
-    heightChanged = QtCore.Signal(int)  # 创建信号，窗口高度改变
+    #numChannels = QtCore.Signal(int)  # 创建信号，窗口高度改变
     window_height = 600
     nums_channel = 0
     xs = [1, 2, 4, 5, 10, 30, 60, 120, 300, 1800]
@@ -202,17 +202,13 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         if (pvm := self._page_viewmodel) is not None and (vm := self._viewmodel) is not None:
             vm.zoom(int(y // pvm.channel_height), amount / -360)
 
-    @QtCore.Property(int, notify=heightChanged)  # 添加属性
-    def window_height(self):
-        return self._window_height
 
     @QtCore.Slot(int)
     def setWindowHeight(self, height):
         if WaveformView.window_height != height:
             WaveformView.window_height = height
-            #self.heightChanged.emit(height)
+            #self.numChannels.emit(self.num_channels)
             print(f"Height updated globally: {self.window_height}px")
-        #return self._window_height
 
         # 用于测试高度值是否更新
 
@@ -226,17 +222,18 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         frac,_ = self._viewmodel.get_standard_fraction(
             int(logical_width) if downsample else None)
         self.num_channels = frac.shape[1]
-        N = max(self.num_channels, 80)
-        height = math.ceil(self.num_channels * pvm.channel_height * dpi)
+
+        #self.numChannels.emit(self.num_channels)
+
         if test_portion == 4:
             return
 
 
 
-        print(f"------------------通道数量: {type(self.num_channels)}---------------------")
+        print(f"------------------通道数量: {self.num_channels}---------------------")
 
 
-        frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * self.window_height / min(self.num_channels + 1, 9) * dpi).astype(np.int32)
+        frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * pvm.channel_height * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's

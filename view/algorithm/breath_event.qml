@@ -17,7 +17,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 50
             onClicked:function(mouse){
-                   main_loader.item.viewmodel.mark_breathe_event_num = 0;
+                   contentLoader.item.viewmodel.mark_breathe_event_num = 0;
 
             }
             background: Rectangle {
@@ -30,7 +30,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 50
             onClicked:{
-                main_loader.item.viewmodel.mark_breathe_event_num = 1;
+                contentLoader.item.viewmodel.mark_breathe_event_num = 1;
             }
             background: Rectangle {
                 color: "green"
@@ -42,7 +42,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
             onClicked:{
-                main_loader.item.viewmodel.mark_breathe_event_num = 2;
+                contentLoader.item.viewmodel.mark_breathe_event_num = 2;
             }
             background: Rectangle {
                 color: "blue"
@@ -56,7 +56,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
             onClicked:{
-                main_loader.item.viewmodel.auto_breathe_event_annotate_flag = 1
+                contentLoader.item.viewmodel.auto_breathe_event_annotate_flag = 1
             }
         }
 
@@ -65,7 +65,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.set_save_flag = 1
+                contentLoader.item.viewmodel.set_save_flag = 1
             }
         }
 
@@ -74,7 +74,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.set_delete_flag = 1
+                contentLoader.item.viewmodel.set_delete_flag = 1
             }
         }
 
@@ -83,7 +83,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.save_mark_breathe_event_record = 1
+                contentLoader.item.viewmodel.save_mark_breathe_event_record = 1
             }
         }
     }

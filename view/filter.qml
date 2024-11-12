@@ -32,8 +32,8 @@ RowLayout {
                     icon.source: "images/icon/filter.png"
                     icon.color: "transparent"
                     onClicked: {
-                        main_loader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
-                        main_loader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
+                        contentLoader.item.viewmodel.lowpass = parseFloat(lowpass_filter_input.text) || 0
+                        contentLoader.item.viewmodel.hipass = parseFloat(highpass_filter_input.text) || 0
                     }
                 }
         }
@@ -47,11 +47,11 @@ RowLayout {
                 model: ["None", "50Hz", "60Hz"] // 滤波参数列表
                 onActivated: {
                     if (filterComboBox.currentText === "50Hz") {
-                        main_loader.item.viewmodel.notch = parseFloat(50) || 0
+                        contentLoader.item.viewmodel.notch = parseFloat(50) || 0
                     } else if (filterComboBox.currentText === "60Hz") {
-                        main_loader.item.viewmodel.notch = parseFloat(60) || 0
+                        contentLoader.item.viewmodel.notch = parseFloat(60) || 0
                     } else {
-                        main_loader.item.viewmodel.notch = 0
+                        contentLoader.item.viewmodel.notch = 0
                     }
                 }
             }

@@ -23,8 +23,8 @@ RowLayout {
                     }
                     else {
                         mark_loader.visible=true
-                        mark_loader.setSource("tag_view.qml",{"page_viewmodel":main_loader.item.viewmodel});
-                        main_loader.item.viewmodel.seek(0)
+                        mark_loader.setSource("tag_view.qml",{"page_viewmodel":contentLoader.item.viewmodel});
+                        contentLoader.item.viewmodel.seek(0)
                     }
                 }
             }
@@ -33,7 +33,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='N1'
+                    contentLoader.item.viewmodel.mark_sequence='N1'
                 }
             }
             Button {
@@ -41,7 +41,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='N2'
+                    contentLoader.item.viewmodel.mark_sequence='N2'
                 }
             }
             Button {
@@ -49,7 +49,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='N3'
+                    contentLoader.item.viewmodel.mark_sequence='N3'
                 }
             }
             GroupBox {
@@ -73,7 +73,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='W'
+                    contentLoader.item.viewmodel.mark_sequence='W'
                 }
             }
             Button {
@@ -81,7 +81,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='R'
+                    contentLoader.item.viewmodel.mark_sequence='R'
                 }
 
             }
@@ -90,7 +90,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.mark_sequence='?'
+                    contentLoader.item.viewmodel.mark_sequence='?'
                 }
 
             }
@@ -99,7 +99,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    if(main_loader.item.viewmodel.position!=0) main_loader.item.viewmodel.seek(main_loader.item.viewmodel.position-30)
+                    if(contentLoader.item.viewmodel.position!=0) contentLoader.item.viewmodel.seek(contentLoader.item.viewmodel.position-30)
                 }
             }
             Button {
@@ -107,7 +107,7 @@ RowLayout {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 50
                 onClicked:{
-                    main_loader.item.viewmodel.seek(main_loader.item.viewmodel.position+30)
+                    contentLoader.item.viewmodel.seek(contentLoader.item.viewmodel.position+30)
                 }
             }
         }
@@ -118,10 +118,10 @@ RowLayout {
         Text { text: "Montage" }
         ComboBox {
             model: MontageRegistry.get_names()
-            currentIndex: main_loader.item?.viewmodel.montage_index ?? 0
+            currentIndex: contentLoader.item?.viewmodel.montage_index ?? 0
             implicitWidth: 100
             onActivated: function (index) {
-                main_loader.item.viewmodel.montage_index = index
+                contentLoader.item.viewmodel.montage_index = index
             }
         }
     }

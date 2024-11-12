@@ -73,7 +73,7 @@ RowLayout {
         icon.color: "transparent"
         icon.width: 40 // 设置图标宽度为40
         icon.height: 40 // 设置图标高度为40
-        onClicked: main_loader.setSource("")
+        onClicked: contentLoader.setSource("")
     }
 
 
@@ -87,7 +87,7 @@ RowLayout {
             icon.color: "transparent"
             icon.width: 40 // 设置图标宽度为40
             icon.height: 40 // 设置图标高度为40
-            onClicked: main_loader.setSource("")
+            onClicked: contentLoader.setSource("")
         }
 
     ToolSeparator { Layout.fillHeight: true }
@@ -100,7 +100,7 @@ RowLayout {
                 icon.color: "transparent"
                 icon.width: 40 // 设置图标宽度为40
                 icon.height: 40 // 设置图标高度为40
-                onClicked: main_loader.setSource("")
+                onClicked: contentLoader.setSource("")
             }
     ToolSeparator { Layout.fillHeight: true }
 

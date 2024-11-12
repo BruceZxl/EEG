@@ -17,7 +17,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 50
             onClicked:function(mouse){
-                   main_loader.item.viewmodel.mark_spindle_notation_num = 1;
+                   contentLoader.item.viewmodel.mark_spindle_notation_num = 1;
 
             }
             background: Rectangle {
@@ -33,7 +33,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 100
             onClicked:{
-                main_loader.item.viewmodel.auto_spindle_annotate_flag = 1
+                contentLoader.item.viewmodel.auto_spindle_annotate_flag = 1
             }
         }
 
@@ -42,7 +42,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.set_save_flag_spindle = 1
+                contentLoader.item.viewmodel.set_save_flag_spindle = 1
             }
         }
 
@@ -51,7 +51,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.set_delete_flag_spindle = 1
+                contentLoader.item.viewmodel.set_delete_flag_spindle = 1
             }
         }
 
@@ -60,7 +60,7 @@ RowLayout {
             Layout.fillWidth: true
             Layout.preferredWidth: 30
             onClicked:{
-                main_loader.item.viewmodel.save_mark_breathe_event_record = 1
+                contentLoader.item.viewmodel.save_mark_breathe_event_record = 1
             }
         }
     }

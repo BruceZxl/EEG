@@ -65,7 +65,7 @@ ApplicationWindow {
                     Layout.fillHeight: true
                     checkable: true
                     checked: { menu_window.current == this }
-                    // enabled: main_loader.item != null
+                    // enabled: contentLoader.item != null
                     onClicked: {
                         if (menu_window.current != this) {
                             context_loader.setSource("algorithm_view.qml", {
@@ -192,7 +192,7 @@ ApplicationWindow {
             FolderDialog {
                 id: createNewDialog
                 title: "Save new project to..."
-                onAccepted: main_loader.setSource("waveform_page.qml", {
+                onAccepted: contentLoader.setSource("waveform_page.qml", {
                     "path": folder,
                     "neo": true
                 })
@@ -364,7 +364,6 @@ ApplicationWindow {
                         anchors.fill: parent
 
                         onHeightChanged: WaveformView.setWindowHeight(height)
-
                     }
                 }
             }
@@ -464,7 +463,7 @@ ApplicationWindow {
 
                 Loader {
                             active: source != ""
-                            id: main_loader1
+                            id: contentLoader1
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                     }
@@ -485,19 +484,7 @@ ApplicationWindow {
                 Layout.preferredHeight: 80
             }
 
-            RowLayout{
 
-
-
-
-                Loader {
-                        active: source != ""
-                        id: main_loader
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                }
-
-            }
 
             Loader {
                 source: ""
@@ -511,19 +498,19 @@ ApplicationWindow {
 
             Loader {
                 id: ipport_window
-                active: main_loader.item?.viewmodel.ipport_mode ?? false
+                active: contentLoader.item?.viewmodel.ipport_mode ?? false
                 source: "ipport_view.qml"
             }
 
             Connections {
                 target: ipport_window.item?.window ?? null
                 function onClosing(val) {
-                    main_loader.item.viewmodel.ipport_mode = false
+                    contentLoader.item.viewmodel.ipport_mode = false
                 }
             }
 
             Connections {
-                target: main_loader.item?.viewmodel ?? null
+                target: contentLoader.item?.viewmodel ?? null
                 function onLoadingChanged(val) {
                     body.loading = val
                 }

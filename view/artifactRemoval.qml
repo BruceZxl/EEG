@@ -31,7 +31,7 @@ Rectangle{
                 if(menuWindow.current_index != menuWindow.button_index[2]){
                     filter.color="aliceblue"
                     filterText.color="steelblue"
-                    menu_view_loader.setSource("filter_menu.qml",{"viewmodel":main_loader.item.viewmodel,"isVisiable":true})
+                    menu_view_loader.setSource("filter_menu.qml",{"viewmodel":contentLoader.item.viewmodel,"isVisiable":true})
                     console.log("menuWindow.current_index",menuWindow.current_index)
                 }else{
                     filter.color="steelblue"
