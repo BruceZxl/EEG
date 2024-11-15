@@ -13,6 +13,7 @@ from loguru import logger
 
 from data_model.frame_size import FrameSize
 from viewmodel.frame_sizes import FrameSizes
+from viewmodel.montage_block_viewmodel import MontageBlockViewModel
 from viewmodel.waveform_area_viewmodel import WaveformAreaViewModel
 from viewmodel.waveform_page_viewmodel import WaveformPageViewModel
 
@@ -50,6 +51,7 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     window_height = 600
     nums_channel = 0
     xs = [1, 2, 4, 5, 10, 30, 60, 120, 300, 1800]
+    channel_names=[]
 
 
     def __init__(self):  # 初始化 定义
@@ -204,17 +206,36 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
 
 
     @QtCore.Slot(int)
-    def setWindowHeight(self, height):
+    def setWinHeight(self, height):
         if WaveformView.window_height != height:
-            WaveformView.window_height = height
+            WaveformView.window_height = height - 100
             #self.numChannels.emit(self.num_channels)
             print(f"Height updated globally: {self.window_height}px")
 
         # 用于测试高度值是否更新
 
+    def get_channel_names(self):
+        # 访问 WaveformAreaViewModel 实例
+        self.channel_names=[]
+        viewmodel = self._viewmodel
+
+        if viewmodel is not None:
+            # 访问 montage_block_viewmodel 属性
+            for i in range(viewmodel.montage_block_viewmodel.num_channels):
+                montage_block_vm = viewmodel.montage_block_viewmodel.channels[i].name
+                if montage_block_vm not in self.channel_names:
+                    self.channel_names.append(montage_block_vm)
+
+            # 现在可以使用 montage_block_vm 进行进一步的操作
+            print(f"----------CHANNEL NAMES:{self.channel_names}-----------")
+
+
 
     def _render(self, downsample=True, test_portion=0):
+
+        self.get_channel_names()
         pvm = self._page_viewmodel
+
         dpi = self.window().devicePixelRatio()
         logical_width = self.width()
         width = math.ceil(logical_width * dpi)
@@ -222,8 +243,6 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         frac,_ = self._viewmodel.get_standard_fraction(
             int(logical_width) if downsample else None)
         self.num_channels = frac.shape[1]
-
-        #self.numChannels.emit(self.num_channels)
 
         if test_portion == 4:
             return
@@ -233,7 +252,8 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
         print(f"------------------通道数量: {self.num_channels}---------------------")
 
 
-        frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * pvm.channel_height * dpi).astype(np.int32)
+        #frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * pvm.channel_height * dpi).astype(np.int32)
+        frac += ((np.arange(self.num_channels, dtype=np.float32) + .5) * self.window_height / (self.num_channels + 1) * dpi).astype(np.int32)
 
         # allocate canvas if needed
         # TODO: change canvas re-allocation algo to growable array's
@@ -288,14 +308,39 @@ class WaveformView(QQuickPaintedItem):  # 波形视图
     #     else:
     #         print("Invalid index:", index)
 
-    @staticmethod
-    def _render_portion(colors,portion, xpos, img, thickness):
+    #@staticmethod
+    def _render_portion(self, colors,portion, xpos, img, thickness):
+        Channel_colors = {'EDG': (255,0,0), 'EMG': (0,180,0), 'EEG': (0,0,180), 'Resp': (255,0,180), 'ECG': (0,0,0), 'SaO2': (255,0,0)}
+        #print(f"-----------{sum('1' in item for item in self.channel_names)}-----------\n")
 
         for i in range(portion.T.shape[0]):
             channel = portion.T[i, :]
+            #print(f"--------{MontageBlockViewModel.channels}---------")
+            if 'EDG' in self.channel_names[i]:
+                #print("1")
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                                  isClosed=False, color=Channel_colors['EDG'], thickness=thickness)
+            elif 'EMG' in self.channel_names[i]:
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                              isClosed=False, color=Channel_colors['EMG'], thickness=thickness)
+            elif 'EEG' in self.channel_names[i]:
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                              isClosed=False, color=Channel_colors['EEG'], thickness=thickness)
+            elif 'RESP' in self.channel_names[i]:
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                              isClosed=False, color=Channel_colors['RESP'], thickness=thickness)
+            elif 'ECG' in self.channel_names[i]:
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                              isClosed=False, color=Channel_colors['ECG'], thickness=thickness)
+            else:
+                cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                              isClosed=False, color=Channel_colors['SaO2'], thickness=thickness)
+            '''cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
+                          isClosed=False, color=Channel_colors['EMG'], thickness=thickness)'''
 
-            cv2.polylines(img, [np.reshape(np.stack((xpos, channel), axis=-1), (-1, 1, 2))],
-                              isClosed=False, color=colors[i], thickness=thickness)
+
+            #print(f"--------{colors}---------")
+
 
 
         # portion_1 = portion.T[:2,:]

@@ -141,7 +141,7 @@ ColumnLayout {
                     delegate: Text {
                         text: modelData.name
                         width: channeLabelWidth
-                        height: contentLoader.height / (area_viewmodel.montage_block_viewmodel.num_channels + 1)
+                        height: (contentLoader.height - 100) / (area_viewmodel.montage_block_viewmodel.num_channels + 1)
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }

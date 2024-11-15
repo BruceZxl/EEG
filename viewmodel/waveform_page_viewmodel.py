@@ -29,6 +29,7 @@ from brainmap import Brain_map
 from data_model.axes.time_axis import TimeAxis
 from data_model.waveform import WaveformModel
 from viewmodel.montage_registry import MontageRegistry
+from viewmodel.montage_block_viewmodel import MontageBlockViewModel
 from algorithm import Algorithms
 from breathe_event_detection.detect import breathe_event_detect
 from algorithm.compilite.stage import stage_5
@@ -64,9 +65,8 @@ class WaveformPageViewModel(QObject):
     channelpositionChanged = QtCore.Signal()
     positionyChanged = QtCore.Signal()
 
-    channelHeightChanged = QtCore.Signal()  # 高度变化信号
-    _channel_height = 80 #通道高度
     window_height = 600 #窗口高度
+    #_channel_height = 80  # 通道高度
 
     def __init__(self, *, parent=None):
         super().__init__(parent)
@@ -78,7 +78,7 @@ class WaveformPageViewModel(QObject):
         self._maggot_mode = False
         self._project: Optional[ESigProject] = None
         # 初始化时设置一个默认值，这个值会在第一次接收到容器高度时被更新
-        #self._channel_height = 150
+        self._channel_height = 80
 
 
         self._user_amplifier: Optional[np.ndarray] = None
@@ -123,7 +123,8 @@ class WaveformPageViewModel(QObject):
         if self.window_height != height:
             self.window_height = height
             # self.numChannels.emit(self.num_channels)
-            print(f"Height updated globally: {self.window_height}px")
+
+            print(f"K2-----Height updated globally: {self.window_height}px")
 
 
 

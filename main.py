@@ -60,8 +60,10 @@ def main():
 
 
     #注册方法
-    logic = WaveformView()
-    eng.rootContext().setContextProperty("WaveformView", logic)
+    logic1 = WaveformPageViewModel()
+    eng.rootContext().setContextProperty("WaveformPageViewModel", logic1)
+    logic2 = WaveformView()
+    eng.rootContext().setContextProperty("WaveformView", logic2)
     # 加载 QML 文件
     eng.load(QUrl.fromLocalFile(str(Path(__file__).parent / "view" / "main_page.qml")))
 

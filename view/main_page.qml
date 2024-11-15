@@ -300,10 +300,7 @@ ApplicationWindow {
                         Rectangle {
                             anchors.fill: parent
                             color: "#B0C4DE" // 浅蓝灰
-                            /*Text {
-                                anchors.centerIn: parent
-                                text: "通道属性"
-                            }*/
+
                         }
                         Loader {
                             anchors.top: parent.top // 上对齐
@@ -363,7 +360,12 @@ ApplicationWindow {
                         id: contentLoader
                         anchors.fill: parent
 
-                        onHeightChanged: WaveformView.setWindowHeight(height)
+                        onHeightChanged: {
+                            WaveformView.setWinHeight(height)
+                            WaveformPageViewModel.setWindowHeight(height);
+                        }
+
+
                     }
                 }
             }
